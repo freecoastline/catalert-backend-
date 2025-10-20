@@ -111,6 +111,7 @@ def get_ai_analysis(cat_id: int):
 # 5. 如何运行这个示例？
 # =============================================================================
 
+#入口点1：简单启动（不运行测试）
 if __name__ == "__main__":
     import uvicorn
     print("启动CatAlert简化版API...")
@@ -175,11 +176,22 @@ def test_api():
     for rec in analysis.recommendations:
         print(f"     - {rec}")
 
+# 入口点2：完整启动（运行测试 + 启动服务器）
 if __name__ == "__main__":
-    # 运行测试
-    test_api()
-    print("\n" + "="*50)
+    import sys
+    import uvicorn
+    
+    # 检查命令行参数
+    if len(sys.argv) > 1 and sys.argv[1] == "--simple":
+        # 简单模式：只启动服务器
+        print("启动CatAlert简化版API...")
+        print("访问 http://localhost:8000/docs 查看API文档")
+        print("访问 http://localhost:8000/cats 查看所有猫咪")
+    else:
+        # 完整模式：运行测试 + 启动服务器
+        test_api()
+        print("\n" + "="*50)
+        print("启动CatAlert简化版API...")
     
     # 启动API服务器
-    import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
